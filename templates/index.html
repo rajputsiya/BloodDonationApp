@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blood Donor Management System</title>
+  <!-- IMPORTANT: CSS path -->
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Blood Donor Management System</h1>
+    <div class="top-actions">
+      <button id="open-register">Register as Donor</button>
+      <button id="open-search">Search Donors</button>
+      <button id="open-admin">Admin Login</button>    
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="home">
+      <h2>Welcome</h2>
+      <p>Find donors quickly by blood group and city — or register to donate.</p>
+
+      <div class="cards">
+        <div class="card">
+          <h3>Total Donors</h3>
+          <p id="stat-donors">0</p>
+        </div>
+        <div class="card">
+          <h3>Active Requests</h3>
+          <p id="stat-requests">0</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="list-section" class="hidden">
+      <h2>Donor List</h2>
+      <div class="controls">
+        <input id="filter-name" placeholder="Filter by name" />
+        <select id="filter-blood">
+          <option value="">All Blood Groups</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+        <input id="filter-city" placeholder="Filter by city" />
+        <button id="btn-filter">Filter</button>
+        <button id="btn-clear-filter">Clear</button>
+      </div>
+
+      <div id="donor-list"></div>
+    </section>
+
+    <section id="requests-section" class="hidden">
+      <h2>Requests</h2>
+      <div id="request-list"></div>
+    </section>
+  </main>
+
+  <!-- Donor Registration Modal -->
+  <div id="modal-register" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="register-title">Donor Registration</h3>
+      <form id="donor-form">
+        <label>Name
+          <input id="donor-name" required />
+        </label>
+        <label>Age
+          <input id="donor-age" type="number" min="18" max="100" required />
+        </label>
+        <label>Gender
+          <select id="donor-gender" required>
+            <option value="">Select</option>
+            <option>Male</option><option>Female</option><option>Other</option>
+          </select>
+        </label>
+        <label>Blood Group
+          <select id="donor-blood" required>
+            <option value="">Select</option>
+            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </label>
+        <label>Contact
+          <input id="donor-contact" required placeholder="Phone or Email" />
+        </label>
+        <label>City
+          <input id="donor-city" required />
+        </label>
+        <label>Last Donation Date
+          <input id="donor-last" type="date" />
+        </label>
+        <div class="modal-actions">
+          <button type="submit" id="save-donor">Save</button>
+          <button type="button" id="cancel-register">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div id="modal-search" class="modal hidden">
+    <div class="modal-content">
+      <h3>Search Donors</h3>
+      <div class="search-grid">
+        <label>Blood Group
+          <select id="search-blood">
+            <option value="">Any</option>
+            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </label>
+        <label>City
+          <input id="search-city" placeholder="City or District" />
+        </label>
+        <label>Name
+          <input id="search-name" placeholder="Name (optional)" />
+        </label>
+        <div class="modal-actions">
+          <button id="btn-search">Search</button>
+          <button id="btn-close-search">Close</button>
+        </div>
+      </div>
+
+      <div id="search-results"></div>
+    </div>
+  </div>
+
+  <!-- Request Modal -->
+  <div id="modal-request" class="modal hidden">
+    <div class="modal-content">
+      <h3>Request Blood</h3>
+      <form id="request-form">
+        <input type="hidden" id="request-donor-id" />
+        <p id="request-donor-info"></p>
+        <label>Your Name
+          <input id="req-name" required />
+        </label>
+        <label>Your Contact
+          <input id="req-contact" required placeholder="Phone or Email" />
+        </label>
+        <label>Required Date
+          <input id="req-date" type="date" required />
+        </label>
+        <label>Message
+          <textarea id="req-message" rows="3"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button type="submit">Send Request</button>
+          <button type="button" id="cancel-request">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div id="modal-admin" class="modal hidden">
+    <div class="modal-content">
+      <h3>Admin Login</h3>
+      <form id="admin-login-form">
+        <label>Password
+          <input id="admin-password" type="password" required />
+        </label>
+        <div class="modal-actions">
+          <button type="submit">Login</button>
+          <button type="button" id="close-admin-login">Cancel</button>
+        </div>
+      </form>
+
+      <div id="admin-panel" class="hidden">
+        <h4>Admin Panel</h4>
+        <div class="admin-actions">
+          <button id="admin-logout">Logout</button>
+          <button id="export-csv">Export Donors CSV</button>
+          <button id="seed-sample">Seed Sample Data</button>
+        </div>
+
+        <h5>All Donors</h5>
+        <div id="admin-donors"></div>
+
+        <h5>All Requests</h5>
+        <div id="admin-requests"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <small>&copy; 2025 - Blood Donor Management System</small>
+  </footer>
+
+  <!-- IMPORTANT: JS path -->
+  <script src="/static/app.js"></script>
+</body>
+</html>
