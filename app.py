@@ -142,5 +142,4 @@ def export_donors_csv():
 # Run the app
 # ------------------------------
 if __name__ == "__main__":
-    # debug=True is useful during development
-    app.run(host="127.0.0.1", port=5001, debug=True)
+    app.run()
