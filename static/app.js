@@ -1,9 +1,3 @@
-// Very simple JS to test things step by step
-
-// This popup should appear when the page loads.
-// If you do NOT see this alert, then JS is not loading.
-alert("JS loaded");
-
 // Helper to get element by id
 function $(id) {
   return document.getElementById(id);
